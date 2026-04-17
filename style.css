@@ -1,0 +1,650 @@
+/* ============================================================
+   style.css — Expense & Budget Visualizer
+   Mobile-first, 320px–1920px, no horizontal scroll
+   Supports light mode (default) and dark mode via body.dark
+   ============================================================ */
+
+/* --- CSS Custom Properties (Light Mode) -------------------- */
+:root {
+  /* Background colors */
+  --color-bg-page:        #f0f2f5;
+  --color-bg-card:        #ffffff;
+  --color-bg-input:       #f9fafb;
+  --color-bg-input-focus: #ffffff;
+  --color-bg-item:        #f9fafb;
+  --color-bg-item-hover:  #f0f2f5;
+
+  /* Text colors */
+  --color-text-primary:   #1a1a2e;
+  --color-text-secondary: #374151;
+  --color-text-muted:     #9ca3af;
+  --color-text-label:     #374151;
+
+  /* Border colors */
+  --color-border:         #d1d5db;
+  --color-border-card:    #e8ecf0;
+  --color-border-focus:   #0f3460;
+
+  /* Accent / brand colors */
+  --color-accent:         #0f3460;
+  --color-accent-dark:    #16213e;
+  --color-accent-gold:    #e2b96f;
+
+  /* Header gradient */
+  --color-header-from:    #16213e;
+  --color-header-to:      #0f3460;
+  --color-header-text:    #ffffff;
+
+  /* Section heading */
+  --color-heading:        #0f3460;
+
+  /* Warning banner */
+  --color-warning-bg:     #fff3cd;
+  --color-warning-border: #ffc107;
+  --color-warning-text:   #856404;
+
+  /* Error */
+  --color-error:          #dc2626;
+  --color-error-bg:       #fee2e2;
+  --color-error-border:   #fca5a5;
+
+  /* Monthly summary */
+  --color-monthly-border: #e8ecf0;
+  --color-monthly-amount: #0f3460;
+
+  /* Sort control */
+  --color-sort-bg:        #f9fafb;
+  --color-sort-border:    #d1d5db;
+
+  /* Scrollbar */
+  --color-scrollbar-track: #f0f2f5;
+  --color-scrollbar-thumb: #c4c9d4;
+
+  /* Theme toggle */
+  --color-toggle-bg:      rgba(255, 255, 255, 0.15);
+  --color-toggle-hover:   rgba(255, 255, 255, 0.25);
+  --color-toggle-border:  rgba(255, 255, 255, 0.3);
+}
+
+/* --- CSS Custom Properties (Dark Mode) --------------------- */
+body.dark {
+  --color-bg-page:        #0d1117;
+  --color-bg-card:        #161b22;
+  --color-bg-input:       #21262d;
+  --color-bg-input-focus: #2d333b;
+  --color-bg-item:        #21262d;
+  --color-bg-item-hover:  #2d333b;
+
+  --color-text-primary:   #e6edf3;
+  --color-text-secondary: #c9d1d9;
+  --color-text-muted:     #6e7681;
+  --color-text-label:     #c9d1d9;
+
+  --color-border:         #30363d;
+  --color-border-card:    #30363d;
+  --color-border-focus:   #58a6ff;
+
+  --color-accent:         #58a6ff;
+  --color-accent-dark:    #388bfd;
+  --color-accent-gold:    #e2b96f;
+
+  --color-header-from:    #0d1117;
+  --color-header-to:      #161b22;
+  --color-header-text:    #e6edf3;
+
+  --color-heading:        #58a6ff;
+
+  --color-warning-bg:     #2d2a1e;
+  --color-warning-border: #9e6a03;
+  --color-warning-text:   #d29922;
+
+  --color-error:          #f85149;
+  --color-error-bg:       #3d1a1a;
+  --color-error-border:   #6e2020;
+
+  --color-monthly-border: #30363d;
+  --color-monthly-amount: #58a6ff;
+
+  --color-sort-bg:        #21262d;
+  --color-sort-border:    #30363d;
+
+  --color-scrollbar-track: #161b22;
+  --color-scrollbar-thumb: #30363d;
+
+  --color-toggle-bg:      rgba(255, 255, 255, 0.08);
+  --color-toggle-hover:   rgba(255, 255, 255, 0.15);
+  --color-toggle-border:  rgba(255, 255, 255, 0.2);
+}
+
+/* --- Reset & Base ------------------------------------------ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1rem; /* 16px — min 14px body text */
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* --- App Container ----------------------------------------- */
+.app-container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* --- Header / Balance Display ------------------------------ */
+header {
+  background: linear-gradient(135deg, var(--color-header-from) 0%, var(--color-header-to) 100%);
+  color: var(--color-header-text);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#balance-display {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-accent-gold);
+  letter-spacing: 0.01em;
+}
+
+/* --- Theme Toggle Button ----------------------------------- */
+#theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-toggle-bg);
+  border: 1.5px solid var(--color-toggle-border);
+  border-radius: 50%;
+  color: var(--color-header-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  padding: 0;
+  line-height: 1;
+}
+
+#theme-toggle:hover {
+  background-color: var(--color-toggle-hover);
+}
+
+#theme-toggle:active {
+  transform: scale(0.92);
+}
+
+#theme-toggle:focus-visible {
+  outline: 3px solid var(--color-accent-gold);
+  outline-offset: 2px;
+}
+
+/* --- Storage Warning Banner -------------------------------- */
+#storage-warning {
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-warning-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* --- Sections ---------------------------------------------- */
+section {
+  background: var(--color-bg-card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.25s ease;
+}
+
+body.dark section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+section h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-border-card);
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+/* --- Form Fields ------------------------------------------- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.9rem;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-label);
+  transition: color 0.25s ease;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem; /* min 14px */
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.25s ease, color 0.25s ease;
+  /* Touch target: height will be at least 44px with padding */
+  min-height: 44px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.15);
+  background-color: var(--color-bg-input-focus);
+}
+
+body.dark input[type="text"]:focus,
+body.dark input[type="number"]:focus,
+body.dark select:focus {
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23374151' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.5rem;
+}
+
+body.dark select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9d1d9' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+/* --- Validation Errors ------------------------------------- */
+.field-error {
+  font-size: 0.8rem;
+  color: var(--color-error);
+  min-height: 1.1em;
+  display: block;
+}
+
+input.invalid,
+select.invalid {
+  border-color: var(--color-error);
+}
+
+/* --- Submit Button ----------------------------------------- */
+#add-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 44px; /* touch target */
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 0.25rem;
+}
+
+#add-btn:hover {
+  background-color: var(--color-accent-dark);
+}
+
+#add-btn:active {
+  transform: scale(0.98);
+}
+
+#add-btn:focus-visible {
+  outline: 3px solid var(--color-accent-gold);
+  outline-offset: 2px;
+}
+
+/* --- Sort Control ------------------------------------------ */
+#sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+#sort-control label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-label);
+  white-space: nowrap;
+  margin-bottom: 0; /* override field-group label margin */
+}
+
+#sort-select {
+  flex: 1;
+  min-width: 140px;
+  max-width: 220px;
+  padding: 0.45rem 2.2rem 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1.5px solid var(--color-sort-border);
+  border-radius: 8px;
+  background-color: var(--color-sort-bg);
+  color: var(--color-text-primary);
+  min-height: 44px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.25s ease, color 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23374151' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+body.dark #sort-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9d1d9' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+#sort-select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.15);
+}
+
+body.dark #sort-select:focus {
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}
+
+/* --- Transaction List -------------------------------------- */
+#transaction-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+/* Scrollbar styling */
+#transaction-list::-webkit-scrollbar {
+  width: 5px;
+}
+#transaction-list::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+  border-radius: 4px;
+}
+#transaction-list::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 4px;
+}
+
+/* --- Transaction Item -------------------------------------- */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-bg-item);
+  border: 1px solid var(--color-border-card);
+  border-radius: 8px;
+  transition: background-color 0.15s;
+}
+
+.transaction-item:hover {
+  background-color: var(--color-bg-item-hover);
+}
+
+.transaction-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.transaction-amount {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+/* --- Category Badge ---------------------------------------- */
+.category-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background-color: var(--color-border-card);
+  color: var(--color-text-secondary);
+}
+
+/* --- Delete Button ----------------------------------------- */
+.delete-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  min-width: 44px;  /* touch target */
+  min-height: 44px; /* touch target */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 1.5px solid var(--color-error-border);
+  border-radius: 8px;
+  color: var(--color-error);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+  padding: 0;
+}
+
+.delete-btn:hover {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error);
+}
+
+.delete-btn:focus-visible {
+  outline: 3px solid var(--color-error);
+  outline-offset: 2px;
+}
+
+/* --- Empty State ------------------------------------------- */
+.empty-state {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 1.5rem 0;
+  font-style: italic;
+}
+
+/* --- Chart Section ----------------------------------------- */
+#chart-section {
+  /* inherits section styles */
+}
+
+#chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+#spending-chart {
+  width: 100% !important;
+  height: auto !important;
+}
+
+#chart-empty-label {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+/* --- Monthly Summary Section ------------------------------- */
+#monthly-summary-section {
+  /* inherits section styles */
+}
+
+#monthly-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.monthly-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--color-monthly-border);
+  transition: border-color 0.25s ease;
+}
+
+.monthly-item:last-child {
+  border-bottom: none;
+}
+
+.monthly-month {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  transition: color 0.25s ease;
+}
+
+.monthly-amount {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-monthly-amount);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+/* --- Responsive: Tablet / Desktop (≥ 600px) ---------------- */
+@media (min-width: 600px) {
+  .app-container {
+    padding: 1.5rem;
+  }
+
+  header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-right: 4rem; /* space for absolute-positioned toggle */
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+  }
+
+  #balance-display {
+    font-size: 1.8rem;
+  }
+
+  .transaction-name {
+    max-width: 240px;
+  }
+
+  #chart-wrapper {
+    max-width: 380px;
+  }
+
+  #sort-control {
+    flex-wrap: nowrap;
+  }
+}
+
+/* --- Responsive: Wide Desktop (≥ 900px) -------------------- */
+@media (min-width: 900px) {
+  .app-container {
+    padding: 2rem 1.5rem;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  #balance-display {
+    font-size: 2rem;
+  }
+
+  section {
+    padding: 1.5rem 2rem;
+  }
+
+  .transaction-name {
+    max-width: 300px;
+  }
+
+  #chart-wrapper {
+    max-width: 420px;
+  }
+}
+
+/* --- Prevent horizontal scroll on all viewports ------------ */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}

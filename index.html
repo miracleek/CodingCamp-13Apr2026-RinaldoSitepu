@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense &amp; Budget Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Header / Balance -->
+    <header>
+      <h1>Expense Tracker</h1>
+      <div id="balance-display">Total: Rp 0.00</div>
+      <button id="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">🌙</button>
+    </header>
+
+    <!-- Storage warning banner (hidden by default) -->
+    <div id="storage-warning" hidden>
+      ⚠️ Peringatan: data tidak dapat disimpan di sesi ini. Aplikasi berjalan dalam mode sesi saja.
+    </div>
+
+    <!-- Input Form -->
+    <section id="form-section">
+      <h2>Tambah Transaksi</h2>
+      <form id="transaction-form" novalidate>
+        <div class="field-group">
+          <label for="item-name">Nama Item</label>
+          <input id="item-name" type="text" autocomplete="off" placeholder="Contoh: Makan siang" />
+          <span class="field-error" id="item-name-error" aria-live="polite"></span>
+        </div>
+        <div class="field-group">
+          <label for="amount">Jumlah (Rp)</label>
+          <input id="amount" type="number" min="0.01" step="any" placeholder="Contoh: 15000" />
+          <span class="field-error" id="amount-error" aria-live="polite"></span>
+        </div>
+        <div class="field-group">
+          <label for="category">Kategori</label>
+          <select id="category">
+            <option value="">-- Pilih Kategori --</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Fun">Fun</option>
+          </select>
+          <span class="field-error" id="category-error" aria-live="polite"></span>
+        </div>
+        <button type="submit" id="add-btn">Tambah</button>
+      </form>
+    </section>
+
+    <!-- Transaction List -->
+    <section id="list-section">
+      <h2>Daftar Transaksi</h2>
+      <div id="sort-control">
+        <label for="sort-select">Urutkan:</label>
+        <select id="sort-select" aria-label="Urutkan transaksi">
+          <option value="default">Terbaru</option>
+          <option value="amount">Jumlah Terbesar</option>
+          <option value="category">Kategori (A-Z)</option>
+        </select>
+      </div>
+      <ul id="transaction-list"></ul>
+      <!-- empty-state injected by JS when list is empty -->
+    </section>
+
+    <!-- Pie Chart -->
+    <section id="chart-section">
+      <h2>Distribusi Pengeluaran</h2>
+      <div id="chart-wrapper">
+        <canvas id="spending-chart"></canvas>
+        <p id="chart-empty-label" hidden>Belum ada data untuk ditampilkan.</p>
+      </div>
+    </section>
+
+    <!-- Monthly Summary -->
+    <section id="monthly-summary-section">
+      <h2>Ringkasan Bulanan</h2>
+      <div id="monthly-summary"></div>
+    </section>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
